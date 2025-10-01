@@ -197,21 +197,127 @@ function addConfetti() {
     }
 }
 
+// Particles System
+class ParticleSystem {
+    constructor() {
+        this.particles = [];
+        this.container = document.getElementById('particles');
+        this.init();
+    }
+
+    init() {
+        // Create continuous floating particles
+        setInterval(() => {
+            if (this.particles.length < 15) {
+                this.createParticle();
+            }
+        }, 800);
+
+        // Clean up old particles
+        setInterval(() => {
+            this.cleanupParticles();
+        }, 1000);
+    }
+
+    createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        // Random size between 2-8px
+        const size = Math.random() * 6 + 2;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+
+        // Random horizontal position
+        particle.style.left = Math.random() * 100 + '%';
+
+        // Random colors (cyan, pink, yellow)
+        const colors = ['rgba(0, 255, 255, 0.6)', 'rgba(255, 107, 107, 0.6)', 'rgba(255, 255, 0, 0.6)'];
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        // Random animation duration
+        particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+
+        this.container.appendChild(particle);
+        this.particles.push(particle);
+    }
+
+    cleanupParticles() {
+        this.particles = this.particles.filter(particle => {
+            if (!particle.parentNode) {
+                return false;
+            }
+            return true;
+        });
+    }
+
+    createWinExplosion(cellElement) {
+        const rect = cellElement.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 12; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+
+            const angle = (i * 30) * Math.PI / 180;
+            const distance = 50 + Math.random() * 30;
+            const x = centerX + Math.cos(angle) * distance;
+            const y = centerY + Math.sin(angle) * distance;
+
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.animationDelay = (i * 0.1) + 's';
+
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1000);
+        }
+    }
+}
+
 // Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     const game = new TicTacToe();
+    const particles = new ParticleSystem();
 
-    // Add confetti effect on wins
+    // Add sparkle effects on wins
     const originalHandleWin = game.handleWin.bind(game);
     game.handleWin = function () {
         originalHandleWin();
-        addConfetti();
+
+        // Create explosion effect on winning cells
+        this.winningConditions.forEach(condition => {
+            if (condition.every(index => this.board[index] === this.currentPlayer)) {
+                condition.forEach(index => {
+                    const cell = this.cells[index];
+                    particles.createWinExplosion(cell);
+                });
+            }
+        });
     };
 
-    console.log('🎮 Tic Tac Toe Game Loaded!');
+    // Add sound effect simulation (visual feedback)
+    const originalHandleCellClick = game.handleCellClick.bind(game);
+    game.handleCellClick = function (index) {
+        originalHandleCellClick(index);
+
+        // Add ripple effect
+        const cell = this.cells[index];
+        if (cell.textContent && !cell.classList.contains('winning')) {
+            cell.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                cell.style.transform = '';
+            }, 200);
+        }
+    };
+
+    console.log('✨ Neon Tic Tac Toe Game Loaded!');
+    console.log('🎮 Enhanced with particles and animations');
     console.log('📋 Game Rules:');
     console.log('   • Players take turns placing X and O');
     console.log('   • First to get 3 in a row wins');
-    console.log('   • Click Reset Game to play again');
-    console.log('   • Click Reset Score to clear the scoreboard');
+    console.log('   • Enjoy the neon glow effects!');
 });
