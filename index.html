@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe Game</title>
+    <title>✨ Neon Tic Tac Toe ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="particles-container" id="particles"></div>
     <div class="container">
-        <h1>Tic Tac Toe</h1>
+        <h1><span class="neon-text">⚡ TIC TAC TOE ⚡</span></h1>
         <div class="game-info">
             <div class="current-player">Current Player: <span id="current-player">X</span></div>
             <div class="score">
@@ -29,8 +33,8 @@
             <div class="cell" data-index="8"></div>
         </div>
         <div class="game-controls">
-            <button id="reset-game" class="btn">Reset Game</button>
-            <button id="reset-score" class="btn secondary">Reset Score</button>
+            <button id="reset-game" class="btn">🎮 New Game</button>
+            <button id="reset-score" class="btn secondary">📊 Reset Score</button>
         </div>
         <div class="game-status" id="game-status"></div>
     </div>
