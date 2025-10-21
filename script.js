@@ -93,7 +93,7 @@ class TicTacToe {
         this.gameStatusElement.className = 'game-status win';
         this.updateScoreDisplay();
     }
-
+    
     handleDraw() {
         this.gameActive = false;
         this.scores.draws++;
